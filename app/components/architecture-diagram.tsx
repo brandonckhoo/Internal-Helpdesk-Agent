@@ -41,9 +41,11 @@ export default function ArchitectureDiagram() {
         <text x="77" y="113" fontSize="9.5" fill="#7A756F" textAnchor="middle">CSM · AE · Support</text>
         <text x="77" y="127" fontSize="9" fill="#7A756F" textAnchor="middle">HR · Finance</text>
 
-        {/* Arrow 1: User → OpenAI */}
+        {/* Arrow 1: User → OpenAI — white mask hides border crossing */}
+        <rect x="171" y="99" width="10" height="16" fill="white" />
         <line x1="140" y1="107" x2="202" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
+        <rect x="155" y="87" width="32" height="14" fill="white" />
         <text x="170" y="97" fontSize="9" fill="#7A756F" textAnchor="middle">query</text>
 
         {/* ══ Box 2: OpenAI Embeddings ══ */}
