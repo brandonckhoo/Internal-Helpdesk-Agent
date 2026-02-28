@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { wrapOpenAI } from "langsmith/wrappers";
 import { traceable } from "langsmith/traceable";
 import { retrieveChunks, RetrievedChunk } from "@/app/lib/pinecone";
+import { trace } from "@opentelemetry/api";
 
 // LangSmith-wrapped client for chat completions
 const client = wrapOpenAI(new OpenAI());
@@ -293,7 +294,14 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const span = trace.getActiveSpan();
+    span?.setAttribute("input.value", query);
+
     const result = await runAgent(query);
+
+    const answerText = (result.answer as { text?: string } | null)?.text ?? null;
+    span?.setAttribute("output.value", answerText ?? (result.routing ? `Routed to: ${(result.routing as { team: string }).team}` : "Out of scope"));
+
     return NextResponse.json(result);
   } catch (err) {
     console.error("Helpdesk API error:", err);
