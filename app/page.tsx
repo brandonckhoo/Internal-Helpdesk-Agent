@@ -33,7 +33,7 @@ export default function Home() {
 
       {/* ── Demo section ── */}
       <main className="flex flex-col items-center px-6 pt-14">
-        <div className="flex min-h-[calc(100vh-3.5rem)] w-full max-w-2xl flex-col items-center justify-center">
+        <div className="flex min-h-[calc(100vh-3.5rem)] w-full max-w-3xl flex-col items-center justify-center">
           <HelpdeskChat />
         </div>
 

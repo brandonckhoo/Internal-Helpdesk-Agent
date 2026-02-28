@@ -64,7 +64,7 @@ export default function FaqSection() {
         className="text-xs font-semibold uppercase tracking-widest text-center"
         style={{ color: "var(--muted)" }}
       >
-        Why these technologies
+        FAQ
       </p>
       <div
         className="rounded-xl border divide-y overflow-hidden"
@@ -76,20 +76,20 @@ export default function FaqSection() {
               onClick={() => setOpen(open === i ? null : i)}
               className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 transition-colors"
               style={{
-                background: open === i ? `${accent}08` : "transparent",
+                background: "transparent",
               }}
             >
               <span
-                className="text-sm font-medium"
-                style={{ color: open === i ? accent : "var(--foreground)" }}
+                className="text-base font-semibold"
+                style={{ color: "var(--foreground)" }}
               >
                 {q}
               </span>
               <span
                 className="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-transform"
                 style={{
-                  background: `${accent}18`,
-                  color: accent,
+                  background: "var(--surface-raised)",
+                  color: "var(--muted)",
                   transform: open === i ? "rotate(45deg)" : "rotate(0deg)",
                 }}
               >

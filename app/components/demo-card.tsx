@@ -106,18 +106,18 @@ export default function HelpdeskChat() {
   const hasResult = result || loading || error;
 
   return (
-    <div className="w-full max-w-2xl flex flex-col gap-5 py-12">
+    <div className="w-full max-w-3xl flex flex-col gap-5 py-12">
 
       {/* ── Heading (hidden once result is shown) ── */}
       {!hasResult && (
         <div className="text-center space-y-2 mb-2">
           <h1
-            className="text-3xl font-semibold tracking-tight"
+            className="text-5xl font-semibold tracking-tight"
             style={{ color: "var(--foreground)" }}
           >
             How can I help you today?
           </h1>
-          <p className="text-sm" style={{ color: "var(--muted)" }}>
+          <p className="text-base" style={{ color: "var(--muted)" }}>
             Ask about company policies, tools, or submit an engineering ticket.
           </p>
         </div>
