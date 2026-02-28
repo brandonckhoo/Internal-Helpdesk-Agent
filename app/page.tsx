@@ -28,6 +28,7 @@ export default function Home() {
             <TechBadge label="Pinecone" color="#A87CF5" />
             <TechBadge label="LangSmith" color="#F5A154" />
             <TechBadge label="Arize" color="#7B5CF3" />
+            <TechBadge label="Anthropic" color="#C96442" />
           </div>
         </div>
       </nav>
