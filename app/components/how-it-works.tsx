@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 
-const ACCENT = "#7B5CF3";
-
 const STEPS = [
   {
     step: "1",
     title: "Someone asks a question",
+    accent: "#5B9DF5",
     body: [
       "A question comes in from an employee or CSM. It could be a policy question, a request to file a bug, or anything in between.",
       "The agent does not treat question types differently. Every input goes through the same pipeline.",
@@ -16,6 +15,8 @@ const STEPS = [
   {
     step: "2",
     title: "The question gets translated into numbers",
+    accent: "#3ED8C0",
+    tag: "OpenAI embeddings",
     body: [
       "Before the agent can search anything, it converts the question into a list of numbers called an embedding. Think of it like a GPS coordinate for meaning.",
       "Two questions that say the same thing in different words will produce coordinates that sit very close together. Two questions about completely different topics will sit far apart.",
@@ -25,6 +26,8 @@ const STEPS = [
   {
     step: "3",
     title: "Pinecone finds what is relevant",
+    accent: "#A87CF5",
+    tag: "Pinecone",
     body: [
       "Those numbers get sent to Pinecone, a database built specifically for this kind of search. Pinecone has already stored the same kind of number representation for all 24 sections of the company knowledge base.",
       "It compares the question against every stored section, ranks them by how close they are in meaning, and returns the top four in milliseconds.",
@@ -34,6 +37,8 @@ const STEPS = [
   {
     step: "4",
     title: "GPT-5-mini reads and responds",
+    accent: "#3ED8C0",
+    tag: "GPT-5-mini",
     body: [
       "The four retrieved sections land in front of GPT-5-mini as its only context. It does not see the rest of the knowledge base. It does not have internet access.",
       "Working entirely from what Pinecone surfaced, the model decides whether to answer directly, route the question to a specific team, or flag it as outside scope.",
@@ -44,6 +49,8 @@ const STEPS = [
   {
     step: "5",
     title: "Every response is scored by an independent judge",
+    accent: "#7B5CF3",
+    tag: "LLM judge",
     body: [
       "After the model generates an answer, a second GPT-5-mini call evaluates it as an outside observer. The judge receives the original question, the four retrieved KB sections, and the generated answer, but has no knowledge that it produced the answer. That removes the incentive to self-report favourably.",
       "The score you see in the Eval tab is that independent judgment: relevance, accuracy, completeness, and citation quality. Because it runs as a separate call with no shared context, the score reflects actual quality rather than confidence.",
@@ -53,6 +60,8 @@ const STEPS = [
   {
     step: "6",
     title: "Arize monitors quality at scale",
+    accent: "#F5A154",
+    tag: "Arize",
     body: [
       "Every OpenAI call in this agent is traced and sent to Arize automatically. Arize records the full chain: what was retrieved, what the model reasoned, the final answer, and any tool calls made.",
       "Where Arize becomes powerful is at scale. You configure evaluators once in the dashboard, pointing them at Claude (claude-sonnet-4-6) via the Anthropic API, and Arize runs them automatically on every new trace that comes in. Hallucination detection, answer relevance, and retrieval quality are all scored without manual review.",
@@ -73,16 +82,16 @@ export default function HowItWorks() {
       />
 
       <div className="space-y-3">
-        {STEPS.map(({ step, title, body }, i) => (
+        {STEPS.map(({ step, title, accent, tag, body }, i) => (
           <div key={step} className="flex gap-4 sm:gap-6">
             {/* Step number */}
             <div className="flex flex-col items-center flex-shrink-0">
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-xl text-sm font-semibold z-10 transition-all"
                 style={{
-                  background: open === i ? `${ACCENT}22` : `${ACCENT}12`,
-                  color: ACCENT,
-                  border: `1px solid ${open === i ? `${ACCENT}50` : `${ACCENT}28`}`,
+                  background: open === i ? `${accent}22` : `${accent}12`,
+                  color: accent,
+                  border: `1px solid ${open === i ? `${accent}50` : `${accent}28`}`,
                 }}
               >
                 {step}
@@ -93,7 +102,7 @@ export default function HowItWorks() {
             <div
               className="flex-1 rounded-xl border overflow-hidden transition-all"
               style={{
-                borderColor: open === i ? `${ACCENT}40` : "var(--border)",
+                borderColor: open === i ? `${accent}40` : "var(--border)",
                 background: "var(--surface)",
               }}
             >
@@ -101,22 +110,32 @@ export default function HowItWorks() {
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 className="w-full flex items-center justify-between px-5 py-4 text-left gap-4 transition-colors"
-                style={{ background: open === i ? `${ACCENT}06` : "transparent" }}
+                style={{ background: open === i ? `${accent}06` : "transparent" }}
                 onMouseEnter={(e) => {
                   if (open !== i) e.currentTarget.style.background = "var(--surface-raised)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = open === i ? `${ACCENT}06` : "transparent";
+                  e.currentTarget.style.background = open === i ? `${accent}06` : "transparent";
                 }}
               >
-                <span className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>
-                  {title}
-                </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                    {title}
+                  </span>
+                  {tag && (
+                    <span
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wide"
+                      style={{ background: `${accent}14`, color: accent }}
+                    >
+                      {tag}
+                    </span>
+                  )}
+                </div>
                 <span
                   className="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-all"
                   style={{
-                    background: open === i ? `${ACCENT}18` : "var(--surface-raised)",
-                    color: open === i ? ACCENT : "var(--muted)",
+                    background: open === i ? `${accent}18` : "var(--surface-raised)",
+                    color: open === i ? accent : "var(--muted)",
                     transform: open === i ? "rotate(45deg)" : "rotate(0deg)",
                   }}
                 >
@@ -128,7 +147,7 @@ export default function HowItWorks() {
               {open === i && (
                 <div
                   className="px-5 pb-5 space-y-2"
-                  style={{ borderTop: `1px solid ${ACCENT}18` }}
+                  style={{ borderTop: `1px solid ${accent}18` }}
                 >
                   {body.map((para, j) => (
                     <p key={j} className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
