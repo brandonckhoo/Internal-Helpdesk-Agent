@@ -603,7 +603,7 @@ export default function HelpdeskChat() {
             Recent Queries
           </p>
           <div
-            className="rounded-xl border divide-y overflow-hidden"
+            className="rounded-xl border overflow-hidden"
             style={{ borderColor: "var(--border)", background: "var(--surface)" }}
           >
             {history.slice(0, 5).map((entry, i) => (
@@ -612,7 +612,7 @@ export default function HelpdeskChat() {
                 onClick={() => handleRun(entry.query)}
                 disabled={loading}
                 className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors"
-                style={{ background: "transparent" }}
+                style={{ background: "transparent", borderTop: i > 0 ? "1px solid var(--border)" : undefined }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = "var(--surface-raised)")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
