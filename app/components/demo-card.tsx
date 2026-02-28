@@ -17,6 +17,14 @@ interface RagChunk {
   snippet: string;
 }
 
+interface HistoryEntry {
+  query: string;
+  action: "answer" | "route" | "out_of_scope";
+  score: number | null;
+  passed: boolean | null;
+  timestamp: number;
+}
+
 interface HelpdeskResponse {
   decision: {
     action: "answer" | "route" | "out_of_scope";
@@ -56,7 +64,16 @@ export default function HelpdeskChat() {
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("helpdesk_history");
+      if (stored) setHistory(JSON.parse(stored));
+    } catch {}
+  }, []);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -120,6 +137,19 @@ export default function HelpdeskChat() {
       const data: HelpdeskResponse = await res.json();
       setResult(data);
       setActiveTab("response");
+      // Save to history
+      const entry: HistoryEntry = {
+        query: question,
+        action: data.decision.action,
+        score: data.judge?.score ?? null,
+        passed: data.judge?.passed ?? null,
+        timestamp: Date.now(),
+      };
+      setHistory((prev) => {
+        const next = [entry, ...prev].slice(0, 10);
+        try { localStorage.setItem("helpdesk_history", JSON.stringify(next)); } catch {}
+        return next;
+      });
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -529,6 +559,72 @@ export default function HelpdeskChat() {
         </div>
       )}
 
+      {/* ── Recent Queries history ── */}
+      {!hasResult && history.length > 0 && (
+        <div className="space-y-2">
+          <p
+            className="text-xs font-medium uppercase tracking-wider px-1"
+            style={{ color: "var(--muted)" }}
+          >
+            Recent Queries
+          </p>
+          <div
+            className="rounded-xl border divide-y overflow-hidden"
+            style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+          >
+            {history.slice(0, 5).map((entry, i) => (
+              <button
+                key={i}
+                onClick={() => handleRun(entry.query)}
+                disabled={loading}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors"
+                style={{ background: "transparent" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--surface-raised)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+              >
+                {/* Action dot */}
+                <span
+                  className="h-2 w-2 rounded-full flex-shrink-0"
+                  style={{
+                    background:
+                      entry.action === "answer" ? "#10b981"
+                      : entry.action === "route" ? "#f59e0b"
+                      : "#94a3b8",
+                  }}
+                />
+                {/* Query text */}
+                <span
+                  className="flex-1 text-sm truncate"
+                  style={{ color: "var(--foreground)" }}
+                >
+                  {entry.query}
+                </span>
+                {/* Score pill */}
+                {entry.score != null && (
+                  <span
+                    className="flex-shrink-0 text-xs px-2 py-0.5 rounded-full font-medium"
+                    style={
+                      entry.passed
+                        ? { background: "rgba(52,211,153,0.12)", color: "#059669" }
+                        : { background: "rgba(248,113,113,0.12)", color: "#dc2626" }
+                    }
+                  >
+                    {(entry.score * 100).toFixed(0)}%
+                  </span>
+                )}
+                {/* Timestamp */}
+                <span
+                  className="flex-shrink-0 text-xs"
+                  style={{ color: "var(--muted)" }}
+                >
+                  {relativeTime(entry.timestamp)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── Chat input ── */}
       <div className="chat-input">
         <textarea
@@ -565,6 +661,17 @@ export default function HelpdeskChat() {
 
     </div>
   );
+}
+
+/* ─── Helpers ───────────────────────────────────────── */
+function relativeTime(ts: number): string {
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
 }
 
 /* ─── Icons ─────────────────────────────────────────── */

@@ -197,8 +197,19 @@ type AgentResult = {
 
 const runAgent = traceable(
   async (query: string): Promise<AgentResult> => {
+    // Set OpenInference attributes on the helpdesk-agent span (created by traceable)
+    const span = trace.getActiveSpan();
+    span?.setAttribute("openinference.span.kind", "chain");
+    span?.setAttribute("input.value", query);
+
     // RAG retrieval — embed the query and fetch top-4 chunks from Pinecone
     const retrieved = await retrieveChunks(embedClient, query, 4);
+
+    // Set retrieval.documents so Arize hallucination evaluator has reference context
+    retrieved.forEach((chunk, i) => {
+      span?.setAttribute(`retrieval.documents.${i}.document.content`, chunk.content);
+      span?.setAttribute(`retrieval.documents.${i}.document.id`, chunk.heading);
+    });
 
     const systemPrompt = buildSystemPrompt(retrieved);
 
@@ -271,6 +282,13 @@ const runAgent = traceable(
       promptTokens += judgeUsage?.prompt ?? 0;
       completionTokens += judgeUsage?.completion ?? 0;
 
+      const totalTokens = promptTokens + completionTokens;
+      const routingTeam = (parsed.routing as { team?: string } | null)?.team;
+      span?.setAttribute("output.value", answerText ?? (routingTeam ? `Routed to: ${routingTeam}` : "Out of scope"));
+      span?.setAttribute("llm.token_count.prompt", promptTokens);
+      span?.setAttribute("llm.token_count.completion", completionTokens);
+      span?.setAttribute("llm.token_count.total", totalTokens);
+
       return {
         decision: parsed.decision,
         answer: parsed.answer ?? undefined,
@@ -280,7 +298,7 @@ const runAgent = traceable(
           ...(linearTicket ? [{ tool: "create_linear_ticket", ticket: linearTicket }] : []),
         ],
         judge,
-        _usage: { prompt: promptTokens, completion: completionTokens, total: promptTokens + completionTokens },
+        _usage: { prompt: promptTokens, completion: completionTokens, total: totalTokens },
       };
     }
 
@@ -295,13 +313,20 @@ const runAgent = traceable(
     promptTokens += judgeUsage?.prompt ?? 0;
     completionTokens += judgeUsage?.completion ?? 0;
 
+    const totalTokens = promptTokens + completionTokens;
+    const routingTeam = (parsed.routing as { team?: string } | null)?.team;
+    span?.setAttribute("output.value", answerText ?? (routingTeam ? `Routed to: ${routingTeam}` : "Out of scope"));
+    span?.setAttribute("llm.token_count.prompt", promptTokens);
+    span?.setAttribute("llm.token_count.completion", completionTokens);
+    span?.setAttribute("llm.token_count.total", totalTokens);
+
     return {
       decision: parsed.decision,
       answer: parsed.answer ?? undefined,
       routing: parsed.routing ?? undefined,
       tool_results: [ragResult],
       judge,
-      _usage: { prompt: promptTokens, completion: completionTokens, total: promptTokens + completionTokens },
+      _usage: { prompt: promptTokens, completion: completionTokens, total: totalTokens },
     };
   },
   { name: "helpdesk-agent", run_type: "chain" }
@@ -316,18 +341,16 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const span = trace.getActiveSpan();
-    span?.setAttribute("openinference.span.kind", "chain");
-    span?.updateName("helpdesk-agent");
-    span?.setAttribute("input.value", query);
+    // Set input on the root HTTP span so Arize trace list shows it
+    const rootSpan = trace.getActiveSpan();
+    rootSpan?.setAttribute("openinference.span.kind", "chain");
+    rootSpan?.setAttribute("input.value", query);
 
     const result = await runAgent(query);
 
     const answerText = (result.answer as { text?: string } | null)?.text ?? null;
-    span?.setAttribute("output.value", answerText ?? (result.routing ? `Routed to: ${(result.routing as { team: string }).team}` : "Out of scope"));
-    span?.setAttribute("llm.token_count.prompt", result._usage.prompt);
-    span?.setAttribute("llm.token_count.completion", result._usage.completion);
-    span?.setAttribute("llm.token_count.total", result._usage.total);
+    const routingTeam = (result.routing as { team?: string } | null)?.team;
+    rootSpan?.setAttribute("output.value", answerText ?? (routingTeam ? `Routed to: ${routingTeam}` : "Out of scope"));
 
     // Strip internal _usage field before sending to client
     const { _usage: _, ...clientResult } = result;
