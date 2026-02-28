@@ -27,10 +27,10 @@ export default function ArchitectureDiagram() {
 
         {/* ── LangSmith observability wrapper ── */}
         <rect
-          x="195" y="10" width="581" height="176" rx="14"
+          x="175" y="10" width="601" height="176" rx="14"
           fill="#F5A15406" stroke="#F5A154" strokeWidth="1.5" strokeDasharray="6 4"
         />
-        <text x="217" y="33" fontSize="9.5" fill="#F5A154" fontWeight="700" letterSpacing="0.1em">
+        <text x="197" y="33" fontSize="9.5" fill="#F5A154" fontWeight="700" letterSpacing="0.1em">
           LANGSMITH  ·  OBSERVABILITY  ·  TRACES EVERY API CALL
         </text>
 
