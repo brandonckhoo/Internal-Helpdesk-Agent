@@ -54,6 +54,8 @@ export default function HelpdeskChat() {
   const [result, setResult] = useState<HelpdeskResponse | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("response");
   const [error, setError] = useState<string | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [placeholder, setPlaceholder] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize textarea
@@ -63,6 +65,42 @@ export default function HelpdeskChat() {
     ta.style.height = "auto";
     ta.style.height = `${ta.scrollHeight}px`;
   }, [query]);
+
+  // Typewriter placeholder
+  useEffect(() => {
+    if (isFocused || query) return;
+    let idx = 0;
+    let charIdx = 0;
+    let deleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const word = SUGGESTED[idx];
+      if (!deleting) {
+        charIdx++;
+        setPlaceholder(word.slice(0, charIdx));
+        if (charIdx === word.length) {
+          deleting = true;
+          timer = setTimeout(tick, 1800);
+        } else {
+          timer = setTimeout(tick, 48);
+        }
+      } else {
+        charIdx--;
+        setPlaceholder(word.slice(0, charIdx));
+        if (charIdx === 0) {
+          deleting = false;
+          idx = (idx + 1) % SUGGESTED.length;
+          timer = setTimeout(tick, 400);
+        } else {
+          timer = setTimeout(tick, 24);
+        }
+      }
+    };
+
+    timer = setTimeout(tick, 600);
+    return () => clearTimeout(timer);
+  }, [isFocused, query]);
 
   const handleRun = async (q?: string) => {
     const question = (q ?? query).trim();
@@ -480,7 +518,9 @@ export default function HelpdeskChat() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask about policies, tools, or report an issue…"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={isFocused || query ? "Ask about policies, tools, or report an issue…" : placeholder}
           rows={1}
           className="w-full resize-none bg-transparent text-sm outline-none"
           style={{
