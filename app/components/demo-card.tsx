@@ -545,20 +545,6 @@ export default function HelpdeskChat() {
         </div>
       </div>
 
-      {/* ── Suggested prompts (only before first query) ── */}
-      {!hasResult && (
-        <div className="flex flex-wrap gap-2 justify-center">
-          {SUGGESTED.map((s) => (
-            <button
-              key={s}
-              className="prompt-chip"
-              onClick={() => handleRun(s)}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
