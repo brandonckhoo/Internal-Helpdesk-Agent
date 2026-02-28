@@ -52,9 +52,9 @@ const STEPS = [
     accent: "#7B5CF3",
     tag: "LLM judge",
     body: [
-      "After the model generates an answer, a second GPT-5-mini call evaluates it as an outside observer. The judge receives the original question, the four retrieved KB sections, and the generated answer, but has no knowledge that it produced the answer. That removes the incentive to self-report favourably.",
+      "After the model generates an answer, a second call to the OpenAI API using GPT-5-mini evaluates it as an outside observer. The judge receives the original question, the four retrieved KB sections, and the generated answer, but has no knowledge that it produced the answer. That removes the incentive to self-report favourably.",
       "The score you see in the Eval tab is that independent judgment: relevance, accuracy, completeness, and citation quality. Because it runs as a separate call with no shared context, the score reflects actual quality rather than confidence.",
-      "In Arize, we configure claude-sonnet-4-6 from Anthropic as the judge model for online evaluation. Every trace that arrives is automatically scored by Claude via the Anthropic API. This means production quality is continuously monitored by a model from a completely different provider, making the evaluation genuinely independent.",
+      "In Arize, we configure Claude Sonnet 4.6 (claude-sonnet-4-6) via the Anthropic API as the judge model for online evaluation. Every trace that arrives is automatically scored by Claude. This means production quality is continuously monitored by a model from a completely different provider, making the evaluation genuinely independent.",
     ],
   },
   {
