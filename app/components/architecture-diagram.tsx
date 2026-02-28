@@ -44,7 +44,7 @@ export default function ArchitectureDiagram() {
         {/* Arrow 1: User → OpenAI */}
         <line x1="140" y1="107" x2="172" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
-        <text x="122" y="100" fontSize="9" fill="#7A756F" textAnchor="middle">query</text>
+        <text x="153" y="97" fontSize="9" fill="#7A756F" textAnchor="middle">query</text>
 
         {/* ══ Box 2: OpenAI Embeddings ══ */}
         <rect x="172" y="48" width="150" height="118" rx="10"
