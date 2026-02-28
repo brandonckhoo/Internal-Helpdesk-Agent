@@ -211,27 +211,26 @@ export default function Home() {
                 },
                 {
                   step: "5",
-                  title: "Quality gets measured independently",
+                  title: "Every response is scored by an independent judge",
                   body: [
-                    "Every response in this demo is scored by Arize using an independent judge model. The judge receives the original question, the four retrieved knowledge base sections, and the generated answer. Because it evaluates the answer as an outside observer rather than as the model that wrote it, the scores are not inflated.",
-                    "Arize runs four evaluators on every response: hallucination detection, answer relevance, retrieval quality, and citation accuracy. Those scores attach to every trace so you can filter sessions by quality, identify which question categories the agent struggles with, and build a case for what to improve backed by data rather than gut feel.",
-                    "Most teams start measuring quality after they notice something feels off. With Arize running on every response from the first query, quality is measurable before anyone complains.",
+                    "After the model generates an answer, a second GPT-5-mini call evaluates it as an outside observer. The judge receives the original question, the four retrieved KB sections, and the generated answer, but has no knowledge that it produced the answer. That removes the incentive to self-report favourably.",
+                    "The score you see in the Eval tab is that independent judgment: relevance, accuracy, completeness, and citation quality. Because it runs as a separate call with no shared context, the score reflects actual quality rather than confidence.",
                   ],
                   icon: "5",
                   accent: "#7B5CF3",
-                  tag: "Arize",
+                  tag: "LLM judge",
                 },
                 {
                   step: "6",
-                  title: "Every step gets recorded",
+                  title: "Arize monitors quality at scale",
                   body: [
-                    "LangSmith captures the full trace of every interaction: the question, the Pinecone search, the four sections that came back, what the model reasoned, the final answer, and any tool calls made.",
-                    "Those traces feed directly into Arize, which runs independent evaluation on each response after the fact. LangSmith gives you the trail to follow. Arize tells you whether what you see in that trail is any good.",
-                    "Anyone on the team can open any session and follow the chain exactly. Over time, that combination of traces and eval scores becomes a dataset you can use to improve prompts, catch gaps in the knowledge base, and make a data-backed case for where to invest next.",
+                    "Every OpenAI call in this agent is traced and sent to Arize automatically. Arize records the full chain: what was retrieved, what the model reasoned, the final answer, and any tool calls made.",
+                    "Where Arize becomes powerful is at scale. You configure evaluators once in the dashboard, and Arize runs them automatically on every new trace that comes in. Hallucination detection, answer relevance, retrieval quality — all scored without manual review. As query volume grows, you get a dataset that shows exactly where the agent underperforms and what to fix.",
+                    "LangSmith gives you the detailed trace to debug individual sessions. Arize gives you the aggregate picture across thousands of them.",
                   ],
                   icon: "6",
-                  accent: "#F5A154",
-                  tag: "LangSmith",
+                  accent: "#7B5CF3",
+                  tag: "Arize",
                 },
               ].map(({ step, title, body, icon, accent, tag }) => (
                 <div key={step} className="flex gap-4 sm:gap-6">

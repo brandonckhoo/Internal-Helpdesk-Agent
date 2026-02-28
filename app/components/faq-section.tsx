@@ -25,8 +25,8 @@ const FAQS = [
     q: "How do you know if the agent is giving good answers?",
     accent: "#7B5CF3",
     a: [
-      <>Every response in this demo is scored by <strong>Arize</strong> using an independent judge model. The judge receives the original question, the four retrieved knowledge base sections, and the generated answer. Because it evaluates the answer as an outside observer rather than as the model that wrote it, the scores are not inflated.</>,
-      <><strong>Arize</strong> runs four evaluators on every response: hallucination detection, answer relevance, retrieval quality, and citation accuracy. Those scores attach to every trace so you can filter sessions by quality, identify which question categories the agent struggles with, and build a case for what to improve backed by data rather than gut feel.</>,
+      <>Every response is scored by an independent <strong>LLM judge</strong> — a second <strong>GPT-5-mini</strong> call that evaluates the answer as an outside observer. The judge receives the original question, the four retrieved KB sections, and the generated answer, but does not know it produced the answer. That eliminates the incentive to self-report favourably.</>,
+      <>The score in the Eval tab reflects relevance, accuracy, completeness, and citation quality. <strong>Arize</strong> handles the production layer: every OpenAI call is traced and sent to Arize automatically. Once you configure evaluators in the Arize dashboard, they run on every new trace that comes in without any manual work — that is where LLM evaluation at scale actually happens.</>,
     ],
   },
   {
