@@ -1,8 +1,8 @@
-import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
-import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { NodeTracerProvider, BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
+import { registerInstrumentations } from "@opentelemetry/instrumentation";
+import { resourceFromAttributes } from "@opentelemetry/resources";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import { OpenAIInstrumentation } from "@arizeai/openinference-instrumentation-openai";
-import { registerInstrumentations } from "@opentelemetry/instrumentation";
 
 export function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
@@ -11,12 +11,13 @@ export function register() {
       headers: {
         space_id: process.env.ARIZE_SPACE_ID!,
         api_key: process.env.ARIZE_API_KEY!,
-        model_id: "internal-helpdesk-agent",
-        model_version: "1.0",
       },
     });
 
     const provider = new NodeTracerProvider({
+      resource: resourceFromAttributes({
+        "openinference.project.name": "internal-helpdesk-agent",
+      }),
       spanProcessors: [new BatchSpanProcessor(exporter)],
     });
     provider.register();
