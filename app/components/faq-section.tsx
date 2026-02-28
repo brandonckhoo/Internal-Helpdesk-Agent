@@ -60,12 +60,12 @@ export default function FaqSection() {
 
   return (
     <div className="space-y-4">
-      <p
-        className="text-xs font-semibold uppercase tracking-widest text-center"
-        style={{ color: "var(--muted)" }}
+      <h2
+        className="text-3xl font-semibold tracking-tight text-center"
+        style={{ color: "var(--foreground)" }}
       >
-        FAQ
-      </p>
+        Frequently Asked Questions
+      </h2>
       <div
         className="rounded-xl border divide-y overflow-hidden"
         style={{ borderColor: "var(--border)", background: "var(--surface)" }}
