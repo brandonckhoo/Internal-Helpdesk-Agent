@@ -87,11 +87,11 @@ export default function HowItWorks() {
             {/* Step number */}
             <div className="flex flex-col items-center flex-shrink-0">
               <div
-                className="flex h-12 w-12 items-center justify-center rounded-xl text-sm font-semibold z-10 transition-all"
+                className="flex h-12 w-12 items-center justify-center rounded-xl text-sm font-semibold z-10"
                 style={{
-                  background: open === i ? `${accent}22` : `${accent}12`,
-                  color: accent,
-                  border: `1px solid ${open === i ? `${accent}50` : `${accent}28`}`,
+                  background: "var(--surface-raised)",
+                  color: "var(--muted)",
+                  border: "1px solid var(--border)",
                 }}
               >
                 {step}
