@@ -559,6 +559,40 @@ export default function HelpdeskChat() {
         </div>
       )}
 
+      {/* ── Chat input ── */}
+      <div className="chat-input">
+        <textarea
+          ref={textareaRef}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={isFocused || query ? "Ask about policies, report a bug, or get routed to the right team…" : placeholder}
+          rows={1}
+          className="w-full resize-none bg-transparent text-sm outline-none"
+          style={{
+            color: "var(--foreground)",
+            lineHeight: "1.6",
+            maxHeight: "160px",
+            overflowY: "auto",
+          }}
+        />
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-xs" style={{ color: "var(--muted)" }}>
+            Enter to send · Shift+Enter for new line
+          </span>
+          <button
+            onClick={() => handleRun()}
+            disabled={loading || !query.trim()}
+            className="flex h-8 w-8 items-center justify-center rounded-full transition-all disabled:opacity-30"
+            style={{ background: "var(--foreground)", color: "var(--surface)" }}
+          >
+            {loading ? <SpinnerIcon /> : <SendIcon />}
+          </button>
+        </div>
+      </div>
+
       {/* ── Recent Queries history ── */}
       {!hasResult && history.length > 0 && (
         <div className="space-y-2">
@@ -625,39 +659,6 @@ export default function HelpdeskChat() {
         </div>
       )}
 
-      {/* ── Chat input ── */}
-      <div className="chat-input">
-        <textarea
-          ref={textareaRef}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholder={isFocused || query ? "Ask about policies, report a bug, or get routed to the right team…" : placeholder}
-          rows={1}
-          className="w-full resize-none bg-transparent text-sm outline-none"
-          style={{
-            color: "var(--foreground)",
-            lineHeight: "1.6",
-            maxHeight: "160px",
-            overflowY: "auto",
-          }}
-        />
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-xs" style={{ color: "var(--muted)" }}>
-            Enter to send · Shift+Enter for new line
-          </span>
-          <button
-            onClick={() => handleRun()}
-            disabled={loading || !query.trim()}
-            className="flex h-8 w-8 items-center justify-center rounded-full transition-all disabled:opacity-30"
-            style={{ background: "var(--foreground)", color: "var(--surface)" }}
-          >
-            {loading ? <SpinnerIcon /> : <SendIcon />}
-          </button>
-        </div>
-      </div>
 
     </div>
   );
