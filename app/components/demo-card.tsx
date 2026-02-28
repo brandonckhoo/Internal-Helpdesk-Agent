@@ -643,7 +643,7 @@ export default function HelpdeskChat() {
                         : { background: "rgba(248,113,113,0.12)", color: "#dc2626" }
                     }
                   >
-                    {(entry.score * 100).toFixed(0)}%
+                    Eval: {(entry.score * 100).toFixed(0)}% {entry.passed ? "✓" : "✗"}
                   </span>
                 )}
                 {/* Timestamp */}
