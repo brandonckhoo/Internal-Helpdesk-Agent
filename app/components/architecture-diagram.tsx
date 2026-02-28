@@ -5,7 +5,7 @@ export default function ArchitectureDiagram() {
       style={{ borderColor: "var(--border)", background: "var(--surface)" }}
     >
       <svg
-        viewBox="0 0 940 326"
+        viewBox="0 0 970 326"
         className="w-full min-w-[640px]"
         style={{ fontFamily: "var(--font-sans)" }}
         aria-label="RAG pipeline architecture diagram"
@@ -27,10 +27,10 @@ export default function ArchitectureDiagram() {
 
         {/* ── LangSmith observability wrapper ── */}
         <rect
-          x="165" y="10" width="581" height="176" rx="14"
+          x="195" y="10" width="581" height="176" rx="14"
           fill="#F5A15406" stroke="#F5A154" strokeWidth="1.5" strokeDasharray="6 4"
         />
-        <text x="187" y="33" fontSize="9.5" fill="#F5A154" fontWeight="700" letterSpacing="0.1em">
+        <text x="217" y="33" fontSize="9.5" fill="#F5A154" fontWeight="700" letterSpacing="0.1em">
           LANGSMITH  ·  OBSERVABILITY  ·  TRACES EVERY API CALL
         </text>
 
@@ -42,91 +42,90 @@ export default function ArchitectureDiagram() {
         <text x="77" y="127" fontSize="9" fill="#7A756F" textAnchor="middle">HR · Finance</text>
 
         {/* Arrow 1: User → OpenAI */}
-        <line x1="140" y1="107" x2="172" y2="107"
+        <line x1="140" y1="107" x2="202" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
-        <text x="153" y="97" fontSize="9" fill="#7A756F" textAnchor="middle">query</text>
+        <text x="170" y="97" fontSize="9" fill="#7A756F" textAnchor="middle">query</text>
 
         {/* ══ Box 2: OpenAI Embeddings ══ */}
-        <rect x="172" y="48" width="150" height="118" rx="10"
+        <rect x="202" y="48" width="150" height="118" rx="10"
           fill="#3ED8C00C" stroke="#3ED8C055" strokeWidth="1.5" />
-        <text x="247" y="78" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">OpenAI</text>
-        <text x="247" y="96" fontSize="10" fill="#3ED8C0" textAnchor="middle" fontWeight="600">Embeddings API</text>
-        <text x="247" y="114" fontSize="9" fill="#7A756F" textAnchor="middle">text-embedding-3-small</text>
-        <text x="247" y="130" fontSize="9" fill="#7A756F" textAnchor="middle">converts text to numbers</text>
+        <text x="277" y="78" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">OpenAI</text>
+        <text x="277" y="96" fontSize="10" fill="#3ED8C0" textAnchor="middle" fontWeight="600">Embeddings API</text>
+        <text x="277" y="114" fontSize="9" fill="#7A756F" textAnchor="middle">text-embedding-3-small</text>
+        <text x="277" y="130" fontSize="9" fill="#7A756F" textAnchor="middle">converts text to numbers</text>
 
         {/* Arrow 2: OpenAI → Pinecone */}
-        <line x1="322" y1="107" x2="362" y2="107"
+        <line x1="352" y1="107" x2="392" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
-        <text x="342" y="100" fontSize="9" fill="#7A756F" textAnchor="middle">embed</text>
+        <text x="372" y="100" fontSize="9" fill="#7A756F" textAnchor="middle">embed</text>
 
         {/* ══ Box 3: Pinecone ══ */}
-        <rect x="362" y="48" width="138" height="118" rx="10"
+        <rect x="392" y="48" width="138" height="118" rx="10"
           fill="#A87CF50C" stroke="#A87CF555" strokeWidth="1.5" />
-        <text x="431" y="78" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Pinecone</text>
-        <text x="431" y="96" fontSize="10" fill="#A87CF5" textAnchor="middle" fontWeight="600">Vector Search</text>
-        <text x="431" y="114" fontSize="9" fill="#7A756F" textAnchor="middle">matches by meaning</text>
-        <text x="431" y="130" fontSize="9" fill="#7A756F" textAnchor="middle">24 policy sections</text>
+        <text x="461" y="78" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Pinecone</text>
+        <text x="461" y="96" fontSize="10" fill="#A87CF5" textAnchor="middle" fontWeight="600">Vector Search</text>
+        <text x="461" y="114" fontSize="9" fill="#7A756F" textAnchor="middle">matches by meaning</text>
+        <text x="461" y="130" fontSize="9" fill="#7A756F" textAnchor="middle">24 policy sections</text>
 
-        {/* Arrow 3: Pinecone → GPT-5-mini (64px gap)
-            Draw line first, then white pill backing, then label on top. ── */}
-        <line x1="500" y1="107" x2="562" y2="107"
+        {/* Arrow 3: Pinecone → GPT-5-mini */}
+        <line x1="530" y1="107" x2="592" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
-        <rect x="510" y="80" width="42" height="24" rx="4" fill="#FFFFFF" />
-        <text x="531" y="92" fontSize="9" fill="#7A756F" textAnchor="middle">top 4</text>
-        <text x="531" y="103" fontSize="9" fill="#7A756F" textAnchor="middle">chunks</text>
+        <rect x="540" y="80" width="42" height="24" rx="4" fill="#FFFFFF" />
+        <text x="561" y="92" fontSize="9" fill="#7A756F" textAnchor="middle">top 4</text>
+        <text x="561" y="103" fontSize="9" fill="#7A756F" textAnchor="middle">chunks</text>
 
         {/* ══ Box 4: GPT-5-mini ══ */}
-        <rect x="562" y="48" width="150" height="118" rx="10"
+        <rect x="592" y="48" width="150" height="118" rx="10"
           fill="#5B9DF50C" stroke="#5B9DF555" strokeWidth="1.5" />
-        <text x="637" y="78" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">GPT-5-mini</text>
-        <text x="637" y="96" fontSize="10" fill="#5B9DF5" textAnchor="middle" fontWeight="600">Generation</text>
-        <text x="637" y="114" fontSize="9" fill="#7A756F" textAnchor="middle">answer / route / OOS</text>
-        <text x="637" y="130" fontSize="9" fill="#7A756F" textAnchor="middle">+ tool calls</text>
+        <text x="667" y="78" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">GPT-5-mini</text>
+        <text x="667" y="96" fontSize="10" fill="#5B9DF5" textAnchor="middle" fontWeight="600">Generation</text>
+        <text x="667" y="114" fontSize="9" fill="#7A756F" textAnchor="middle">answer / route / OOS</text>
+        <text x="667" y="130" fontSize="9" fill="#7A756F" textAnchor="middle">+ tool calls</text>
 
-        {/* Arrow 4: GPT-5-mini → Response (44px gap from LangSmith border) */}
-        <line x1="712" y1="107" x2="786" y2="107"
+        {/* Arrow 4: GPT-5-mini → Response */}
+        <line x1="742" y1="107" x2="816" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
 
         {/* ══ Box 5: Response ══ */}
-        <rect x="786" y="78" width="132" height="58" rx="10"
+        <rect x="816" y="78" width="132" height="58" rx="10"
           fill="#F3F2EE" stroke="#E6E3DC" strokeWidth="1.5" />
-        <text x="852" y="103" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Response</text>
-        <text x="852" y="120" fontSize="9" fill="#7A756F" textAnchor="middle">answer + eval score</text>
+        <text x="882" y="103" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Response</text>
+        <text x="882" y="120" fontSize="9" fill="#7A756F" textAnchor="middle">answer + eval score</text>
 
         {/* Arrow 5: GPT-5-mini → Linear (optional, dashed) */}
-        <line x1="637" y1="166" x2="637" y2="256"
+        <line x1="667" y1="166" x2="667" y2="256"
           stroke="#5B9DF5" strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrowBlue)" />
-        <rect x="641" y="218" width="88" height="13" rx="2" fill="#FFFFFF" />
-        <text x="648" y="228" fontSize="9" fill="#7A756F">bug or feature req</text>
+        <rect x="671" y="218" width="88" height="13" rx="2" fill="#FFFFFF" />
+        <text x="678" y="228" fontSize="9" fill="#7A756F">bug or feature req</text>
 
         {/* Arrow to Slack: GPT-5-mini → Slack (diagonal, optional) */}
-        <line x1="572" y1="166" x2="451" y2="256"
+        <line x1="602" y1="166" x2="481" y2="256"
           stroke="#06B6D4" strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrowCyan)" />
-        <rect x="482" y="213" width="52" height="13" rx="2" fill="#FFFFFF" />
-        <text x="508" y="223" fontSize="9" fill="#7A756F" textAnchor="middle">if routing</text>
+        <rect x="512" y="213" width="52" height="13" rx="2" fill="#FFFFFF" />
+        <text x="538" y="223" fontSize="9" fill="#7A756F" textAnchor="middle">if routing</text>
 
         {/* ══ Box 6: Linear (optional) ══ */}
-        <rect x="562" y="258" width="150" height="52" rx="10"
+        <rect x="592" y="258" width="150" height="52" rx="10"
           fill="#5B9DF508" stroke="#5B9DF540" strokeWidth="1.5" strokeDasharray="5 3" />
-        <text x="637" y="279" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Linear</text>
-        <text x="637" y="295" fontSize="9" fill="#5B9DF5" textAnchor="middle" fontWeight="500">bug or feature request</text>
+        <text x="667" y="279" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Linear</text>
+        <text x="667" y="295" fontSize="9" fill="#5B9DF5" textAnchor="middle" fontWeight="500">bug or feature request</text>
 
         {/* ══ Box 7: Slack (optional) ══ */}
-        <rect x="375" y="258" width="138" height="52" rx="10"
+        <rect x="405" y="258" width="138" height="52" rx="10"
           fill="#06B6D408" stroke="#06B6D440" strokeWidth="1.5" strokeDasharray="5 3" />
-        <text x="444" y="279" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Slack</text>
-        <text x="444" y="295" fontSize="9" fill="#06B6D4" textAnchor="middle" fontWeight="500">notify team channel</text>
+        <text x="474" y="279" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Slack</text>
+        <text x="474" y="295" fontSize="9" fill="#06B6D4" textAnchor="middle" fontWeight="500">notify team channel</text>
 
         {/* Arrow 6: Response → Arize (evaluation of final output) */}
-        <line x1="852" y1="136" x2="852" y2="256"
+        <line x1="882" y1="136" x2="882" y2="256"
           stroke="#7B5CF3" strokeWidth="1.5" strokeDasharray="4 3" markerEnd="url(#arrowArize)" />
-        <text x="864" y="205" fontSize="9" fill="#7A756F">eval</text>
+        <text x="894" y="205" fontSize="9" fill="#7A756F">eval</text>
 
         {/* ══ Box 8: Arize (online evaluation) ══ */}
-        <rect x="786" y="258" width="132" height="52" rx="10"
+        <rect x="816" y="258" width="132" height="52" rx="10"
           fill="#7B5CF308" stroke="#7B5CF340" strokeWidth="1.5" strokeDasharray="5 3" />
-        <text x="852" y="279" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Arize</text>
-        <text x="852" y="295" fontSize="9" fill="#7B5CF3" textAnchor="middle" fontWeight="600">Online Evaluation</text>
+        <text x="882" y="279" fontSize="11.5" fill="#1A1917" textAnchor="middle" fontWeight="600">Arize</text>
+        <text x="882" y="295" fontSize="9" fill="#7B5CF3" textAnchor="middle" fontWeight="600">Online Evaluation</text>
       </svg>
 
       {/* Legend */}
