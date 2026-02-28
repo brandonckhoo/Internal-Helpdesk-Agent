@@ -1,6 +1,7 @@
 import React from "react";
 import HelpdeskChat from "./components/demo-card";
 import ArchitectureDiagram from "./components/architecture-diagram";
+import FaqSection from "./components/faq-section";
 
 export default function Home() {
   return (
@@ -268,84 +269,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Technology stack */}
-          <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-center" style={{ color: "var(--muted)" }}>
-              Why these technologies
-            </p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {(
-                [
-                  {
-                    name: "Pinecone",
-                    role: "Knowledge search",
-                    accent: "#A87CF5",
-                    dot: "#A87CF5",
-                    detail: [
-                      <>Traditional search matches <strong>keywords</strong>. <strong>Pinecone</strong> matches <strong>meaning</strong>. That distinction matters more than it sounds: if someone asks about taking time off and the policy document says paid leave, keyword search fails. <strong>Pinecone</strong> does not.</>,
-                      <>We call the <strong>Pinecone API</strong> at query time, passing it the number representation of the question and getting back the closest knowledge base sections by meaning. It returns results in <strong>under 50ms</strong>, the API is straightforward, and it scales to millions of documents without any infrastructure to manage on our side.</>,
-                      <>The alternatives we considered: <strong>Weaviate</strong> and <strong>Qdrant</strong> are powerful but require you to manage your own infrastructure, which adds operational overhead before you have validated the use case. <strong>pgvector</strong> runs inside Postgres and is a reasonable choice at small scale, but query performance degrades as the dataset grows. <strong>Chroma</strong> is great for local prototyping but is not production-hardened. <strong>Pinecone</strong> is fully managed, consistently the fastest in independent benchmarks, and used by teams at Notion, Shopify, and Slack.</>,
-                    ],
-                  },
-                  {
-                    name: "OpenAI",
-                    role: "Embeddings & LLM",
-                    accent: "#3ED8C0",
-                    dot: "#10a37f",
-                    detail: [
-                      <>We call two separate <strong>OpenAI</strong> APIs. The <strong>embeddings API</strong> (<strong>text-embedding-3-small</strong>) runs at setup time to convert every knowledge base section into a searchable number representation, and again at query time to convert each question.</>,
-                      <>The <strong>chat completions API</strong> (<strong>GPT-5-mini</strong>) runs once per query to read the retrieved context and produce the structured response. We chose <strong>GPT-5-mini</strong> over older models because it handles multi-step decisions and structured JSON output more reliably, and because it supports <strong>native function calling</strong>, which is what makes the Linear ticket creation work without a separate service.</>,
-                      <>Using one provider for both APIs keeps the integration simple and reduces the number of things that can fail.</>,
-                    ],
-                  },
-                  {
-                    name: "LangSmith",
-                    role: "Observability",
-                    accent: "#F5A154",
-                    dot: "#F5A154",
-                    detail: [
-                      <><strong>LangSmith</strong> wraps the OpenAI client and records every call automatically. Each session captures the full chain: input, retrieval results, model reasoning, tool calls, output, and eval score.</>,
-                      <>For a team evaluating whether to expand this kind of agent, that trace is the difference between a gut feeling about quality and an actual dataset. You can filter sessions by eval score, find the questions the agent struggled with, and make a case for what to improve with real evidence rather than anecdote.</>,
-                      <>The alternatives for tracing: <strong>Weights and Biases</strong> is excellent for model training but is not designed for production LLM chains. <strong>Helicone</strong> covers cost and latency but lacks full trace inspection. <strong>LangSmith</strong> is purpose-built for LLM applications and integrates in two lines of code. For continuous evaluation in production, <strong>Arize</strong> is the natural complement. LangSmith captures the traces, Arize scores them independently.</>,
-                    ],
-                  },
-                  {
-                    name: "Arize",
-                    role: "Online evaluation",
-                    accent: "#7B5CF3",
-                    dot: "#7B5CF3",
-                    detail: [
-                      <>This demo uses <strong>Arize</strong> to score every response with an independent judge model. The judge receives the original question, the retrieved context, and the generated answer as inputs. It never generated the answer itself, so it has no incentive to call a bad answer good.</>,
-                      <><strong>Arize</strong> runs four evaluators on every response: hallucination detection, answer relevance, retrieval quality, and citation accuracy. The scores attach to each LangSmith trace so you can filter sessions by quality and see exactly where the agent is underperforming.</>,
-                      <>We chose <strong>Arize</strong> over alternatives like <strong>Weights and Biases</strong> (built for model training, not production LLM chains) and <strong>Helicone</strong> (good for cost tracking, limited on eval depth). Arize is purpose-built for this use case and ships with out-of-the-box evaluators that work without custom configuration.</>,
-                    ],
-                  },
-                ] as { name: string; role: string; accent: string; dot: string; detail: React.ReactNode[] }[]
-              ).map(({ name, role, detail, accent, dot }) => (
-                <div
-                  key={name}
-                  className="card-sm p-5 space-y-3"
-                  style={{ background: "var(--surface)" }}
-                >
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ background: dot }} />
-                    <p className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>{name}</p>
-                    <span
-                      className="text-[10px] font-medium px-1.5 py-0.5 rounded"
-                      style={{ background: `${accent}14`, color: accent }}
-                    >
-                      {role}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {detail.map((para, j) => (
-                      <p key={j} className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{para}</p>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <FaqSection />
         </section>
 
         {/* ── Footer ── */}
