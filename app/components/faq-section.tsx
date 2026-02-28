@@ -67,29 +67,43 @@ export default function FaqSection() {
         Frequently Asked Questions
       </h2>
       <div
-        className="rounded-xl border divide-y overflow-hidden"
-        style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+        className="rounded-xl overflow-hidden"
+        style={{ border: "1px solid var(--border)", background: "var(--surface)" }}
       >
         {FAQS.map(({ q, a, accent }, i) => (
-          <div key={i}>
+          <div
+            key={i}
+            style={i > 0 ? { borderTop: "1px solid var(--border)" } : undefined}
+          >
             <button
               onClick={() => setOpen(open === i ? null : i)}
               className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 transition-colors"
               style={{
-                background: "transparent",
+                background: open === i ? `${accent}08` : "transparent",
+              }}
+              onMouseEnter={(e) => {
+                if (open !== i) e.currentTarget.style.background = "var(--surface-raised)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = open === i ? `${accent}08` : "transparent";
               }}
             >
+              {/* Accent bar */}
               <span
-                className="text-base font-semibold"
+                className="flex-shrink-0 w-0.5 self-stretch rounded-full transition-all"
+                style={{ background: open === i ? accent : "transparent" }}
+              />
+              <span
+                className="flex-1 text-base font-medium"
                 style={{ color: "var(--foreground)" }}
               >
                 {q}
               </span>
               <span
-                className="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-transform"
+                className="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-all"
                 style={{
-                  background: "var(--surface-raised)",
-                  color: "var(--muted)",
+                  background: open === i ? `${accent}18` : "var(--surface-raised)",
+                  color: open === i ? accent : "var(--muted)",
                   transform: open === i ? "rotate(45deg)" : "rotate(0deg)",
                 }}
               >
@@ -99,8 +113,8 @@ export default function FaqSection() {
 
             {open === i && (
               <div
-                className="px-6 pb-5 space-y-2.5"
-                style={{ borderTop: `1px solid ${accent}20` }}
+                className="px-6 pb-5 space-y-2.5 pl-9"
+                style={{ borderTop: `1px solid ${accent}18` }}
               >
                 {a.map((para, j) => (
                   <p
