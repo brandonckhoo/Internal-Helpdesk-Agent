@@ -72,9 +72,9 @@ export default function ArchitectureDiagram() {
         {/* Arrow 3: Pinecone → GPT-5-mini (+20px gap) */}
         <line x1="550" y1="107" x2="632" y2="107"
           stroke="#7A756F" strokeWidth="1.5" markerEnd="url(#arrowGray)" />
-        <rect x="570" y="80" width="42" height="24" rx="4" fill="#FFFFFF" />
-        <text x="591" y="92" fontSize="9" fill="#7A756F" textAnchor="middle">top 4</text>
-        <text x="591" y="103" fontSize="9" fill="#7A756F" textAnchor="middle">chunks</text>
+        <rect x="570" y="95" width="42" height="24" rx="4" fill="#FFFFFF" />
+        <text x="591" y="106" fontSize="9" fill="#7A756F" textAnchor="middle">top 4</text>
+        <text x="591" y="117" fontSize="9" fill="#7A756F" textAnchor="middle">chunks</text>
 
         {/* ══ Box 4: GPT-5-mini ══ */}
         <rect x="632" y="48" width="150" height="118" rx="10"
