@@ -24,11 +24,11 @@ export default function Home() {
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            <TechBadge label="GPT-5-mini" color="#10a37f" />
+            <TechBadge label="OpenAI · GPT-5-mini" color="#10a37f" />
             <TechBadge label="Pinecone" color="#A87CF5" />
             <TechBadge label="LangSmith" color="#F5A154" />
             <TechBadge label="Arize" color="#7B5CF3" />
-            <TechBadge label="Anthropic" color="#C96442" />
+            <TechBadge label="Anthropic · claude-sonnet-4-6" color="#C96442" />
           </div>
         </div>
       </nav>
