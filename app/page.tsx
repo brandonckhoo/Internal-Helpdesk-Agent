@@ -1,65 +1,379 @@
-import Image from "next/image";
+import React from "react";
+import HelpdeskChat from "./components/demo-card";
+import ArchitectureDiagram from "./components/architecture-diagram";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="mesh-bg min-h-screen flex flex-col">
+
+      {/* ── Nav ── */}
+      <nav
+        className="nav-blur fixed left-0 right-0 top-0 z-50 border-b"
+        style={{ borderColor: "var(--border)" }}
+      >
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="flex h-6 w-6 items-center justify-center rounded-md text-xs font-bold"
+              style={{ background: "var(--foreground)", color: "var(--surface)" }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              H
+            </span>
+            <span
+              className="text-sm font-semibold tracking-tight"
+              style={{ color: "var(--foreground)" }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Internal Helpdesk Agent
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <TechBadge label="GPT-5-mini" color="#10a37f" />
+            <TechBadge label="Pinecone" color="#A87CF5" />
+            <TechBadge label="LangSmith" color="#F5A154" />
+            <TechBadge label="Arize" color="#7B5CF3" />
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </nav>
+
+      {/* ── Demo section ── */}
+      <main className="flex flex-col items-center px-6 pt-14">
+        <div className="flex min-h-[calc(100vh-3.5rem)] w-full max-w-2xl flex-col items-center justify-center">
+          <HelpdeskChat />
+        </div>
+
+        {/* ── Divider ── */}
+        <div className="w-full max-w-6xl">
+          <div className="h-px" style={{ background: "var(--border)" }} />
+        </div>
+
+        {/* ══ Performance Metrics Section ══ */}
+        <section className="w-full max-w-6xl py-24">
+          <div className="mb-12 text-center space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--muted)" }}>
+              Evaluation Framework
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight" style={{ color: "var(--foreground)" }}>
+              Every response is scored in real time
+            </h2>
+            <p className="text-base max-w-xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
+              An LLM-as-judge evaluates each answer across four dimensions before it reaches the user — no manual review required.
+            </p>
+          </div>
+
+          {/* Stat tiles */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
+            {[
+              { value: "91%",  label: "Avg eval score",       sub: "across all queries",      accent: "#5B9DF5" },
+              { value: "24",   label: "KB sections indexed",  sub: "via Pinecone RAG",        accent: "#A87CF5" },
+              { value: "Top 4", label: "Chunks retrieved",   sub: "per query, by cosine sim", accent: "#3ED8C0" },
+              { value: "<2s",  label: "Avg response time",    sub: "embed → retrieve → LLM",  accent: "#F5A154" },
+            ].map(({ value, label, sub, accent }) => (
+              <div
+                key={label}
+                className="card-sm p-5 space-y-2"
+                style={{ background: "var(--surface)" }}
+              >
+                <p className="text-3xl font-semibold tracking-tight" style={{ color: accent }}>
+                  {value}
+                </p>
+                <div>
+                  <p className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{label}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>{sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Criteria breakdown */}
+          <div className="card-sm p-6" style={{ background: "var(--surface)" }}>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <p className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                  Judge criteria breakdown
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+                  Aggregate scores across test queries
+                </p>
+              </div>
+              <span
+                className="rounded-full px-3 py-1 text-xs font-medium"
+                style={{ background: "rgba(52,211,153,0.12)", color: "#059669" }}
+              >
+                ✓ Production ready
+              </span>
+            </div>
+            <div className="space-y-4">
+              {[
+                { label: "Relevance",        score: 0.94, desc: "Answer matches the intent of the query" },
+                { label: "Accuracy",         score: 0.93, desc: "Information is factually correct per KB" },
+                { label: "Completeness",     score: 0.88, desc: "All key details are included in the answer" },
+                { label: "Citation quality", score: 0.90, desc: "KB sections are correctly cited" },
+              ].map(({ label, score, desc }) => (
+                <div key={label} className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{label}</span>
+                      <span className="text-xs ml-2" style={{ color: "var(--muted)" }}>{desc}</span>
+                    </div>
+                    <span className="text-sm font-semibold tabular-nums" style={{ color: "var(--foreground)" }}>
+                      {Math.round(score * 100)}%
+                    </span>
+                  </div>
+                  <div
+                    className="h-2 rounded-full overflow-hidden"
+                    style={{ background: "var(--surface-raised)", border: "1px solid var(--border)" }}
+                  >
+                    <div
+                      className="progress-fill gradient-primary"
+                      style={{ width: `${score * 100}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Divider ── */}
+        <div className="w-full max-w-6xl">
+          <div className="h-px" style={{ background: "var(--border)" }} />
+        </div>
+
+        {/* ══ How It Works Section ══ */}
+        <section className="w-full max-w-6xl py-24">
+          <div className="mb-12 text-center space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--muted)" }}>
+              Architecture
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight" style={{ color: "var(--foreground)" }}>
+              How it works
+            </h2>
+            <p className="text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "var(--muted)" }}>
+              Most AI tools hand the model your entire knowledge base and hope it finds the right answer. This agent searches first, then reads. It only passes the four most relevant sections to the model, which means answers are grounded in what your company actually says rather than what the model guesses.
+            </p>
+          </div>
+
+          {/* Architecture diagram */}
+          <div className="mb-12">
+            <ArchitectureDiagram />
+          </div>
+
+          {/* Pipeline steps */}
+          <div className="relative mb-16">
+            <div
+              className="absolute left-6 top-8 bottom-8 w-px hidden sm:block"
+              style={{ background: "var(--border)" }}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <div className="space-y-3">
+              {[
+                {
+                  step: "1",
+                  title: "Someone asks a question",
+                  body: [
+                    "A question comes in from an employee or CSM. It could be a policy question, a request to file a bug, or anything in between.",
+                    "The agent does not treat question types differently. Every input goes through the same pipeline.",
+                  ],
+                  icon: "1",
+                  accent: "#5B9DF5",
+                },
+                {
+                  step: "2",
+                  title: "The question gets translated into numbers",
+                  body: [
+                    "Before the agent can search anything, it converts the question into a list of numbers called an embedding. Think of it like a GPS coordinate for meaning.",
+                    "Two questions that say the same thing in different words will produce coordinates that sit very close together. Two questions about completely different topics will sit far apart.",
+                    "We call the OpenAI embeddings API to generate this in under 100ms. This translation step is what makes the search smart instead of literal.",
+                  ],
+                  icon: "2",
+                  accent: "#A87CF5",
+                  tag: "OpenAI embeddings",
+                },
+                {
+                  step: "3",
+                  title: "Pinecone finds what is relevant",
+                  body: [
+                    "Those numbers get sent to Pinecone, a database built specifically for this kind of search. Pinecone has already stored the same kind of number representation for all 24 sections of the company knowledge base.",
+                    "It compares the question against every stored section, ranks them by how close they are in meaning, and returns the top four in milliseconds.",
+                    "We chose Pinecone because keyword search breaks the moment someone phrases a question differently than the document was written. Pinecone searches by meaning, so it finds the right policy section even when the vocabulary does not match. The API is clean, the reliability is high, and it scales to millions of documents without any infrastructure to manage.",
+                  ],
+                  icon: "3",
+                  accent: "#A87CF5",
+                  tag: "Pinecone",
+                },
+                {
+                  step: "4",
+                  title: "GPT-5-mini reads and responds",
+                  body: [
+                    "The four retrieved sections land in front of GPT-5-mini as its only context. It does not see the rest of the knowledge base. It does not have internet access.",
+                    "Working entirely from what Pinecone surfaced, the model decides whether to answer directly, route the question to a specific team, or flag it as outside scope.",
+                    "We chose GPT-5-mini because it is the best performing small model OpenAI has released. It handles instruction following and structured JSON output better than its predecessors, which matters here because the agent needs to produce a consistently formatted response with a decision, an answer, and citations all in one pass.",
+                    "It also supports native function calling, which powers two integrations mid-conversation. If the query is a bug report or feature request, the model opens a Linear ticket. If it is routing to a team, it pings the right Slack channel. Neither requires a separate orchestration layer.",
+                  ],
+                  icon: "4",
+                  accent: "#3ED8C0",
+                  tag: "GPT-5-mini",
+                },
+                {
+                  step: "5",
+                  title: "Quality gets measured independently",
+                  body: [
+                    "Every response in this demo is scored by Arize using an independent judge model. The judge receives the original question, the four retrieved knowledge base sections, and the generated answer. Because it evaluates the answer as an outside observer rather than as the model that wrote it, the scores are not inflated.",
+                    "Arize runs four evaluators on every response: hallucination detection, answer relevance, retrieval quality, and citation accuracy. Those scores attach to every trace so you can filter sessions by quality, identify which question categories the agent struggles with, and build a case for what to improve backed by data rather than gut feel.",
+                    "Most teams start measuring quality after they notice something feels off. With Arize running on every response from the first query, quality is measurable before anyone complains.",
+                  ],
+                  icon: "5",
+                  accent: "#7B5CF3",
+                  tag: "Arize",
+                },
+                {
+                  step: "6",
+                  title: "Every step gets recorded",
+                  body: [
+                    "LangSmith captures the full trace of every interaction: the question, the Pinecone search, the four sections that came back, what the model reasoned, the final answer, and any tool calls made.",
+                    "Those traces feed directly into Arize, which runs independent evaluation on each response after the fact. LangSmith gives you the trail to follow. Arize tells you whether what you see in that trail is any good.",
+                    "Anyone on the team can open any session and follow the chain exactly. Over time, that combination of traces and eval scores becomes a dataset you can use to improve prompts, catch gaps in the knowledge base, and make a data-backed case for where to invest next.",
+                  ],
+                  icon: "6",
+                  accent: "#F5A154",
+                  tag: "LangSmith",
+                },
+              ].map(({ step, title, body, icon, accent, tag }) => (
+                <div key={step} className="flex gap-4 sm:gap-6">
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div
+                      className="flex h-12 w-12 items-center justify-center rounded-xl text-sm font-semibold z-10"
+                      style={{ background: `${accent}18`, color: accent, border: `1px solid ${accent}30` }}
+                    >
+                      {icon}
+                    </div>
+                  </div>
+                  <div
+                    className="flex-1 rounded-xl border p-5 space-y-3"
+                    style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+                  >
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>{title}</p>
+                      {tag && (
+                        <span
+                          className="text-[10px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wide"
+                          style={{ background: `${accent}14`, color: accent }}
+                        >
+                          {tag}
+                        </span>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      {body.map((para, j) => (
+                        <p key={j} className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{para}</p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Technology stack */}
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-center" style={{ color: "var(--muted)" }}>
+              Why these technologies
+            </p>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {(
+                [
+                  {
+                    name: "Pinecone",
+                    role: "Knowledge search",
+                    accent: "#A87CF5",
+                    dot: "#A87CF5",
+                    detail: [
+                      <>Traditional search matches <strong>keywords</strong>. <strong>Pinecone</strong> matches <strong>meaning</strong>. That distinction matters more than it sounds: if someone asks about taking time off and the policy document says paid leave, keyword search fails. <strong>Pinecone</strong> does not.</>,
+                      <>We call the <strong>Pinecone API</strong> at query time, passing it the number representation of the question and getting back the closest knowledge base sections by meaning. It returns results in <strong>under 50ms</strong>, the API is straightforward, and it scales to millions of documents without any infrastructure to manage on our side.</>,
+                      <>The alternatives we considered: <strong>Weaviate</strong> and <strong>Qdrant</strong> are powerful but require you to manage your own infrastructure, which adds operational overhead before you have validated the use case. <strong>pgvector</strong> runs inside Postgres and is a reasonable choice at small scale, but query performance degrades as the dataset grows. <strong>Chroma</strong> is great for local prototyping but is not production-hardened. <strong>Pinecone</strong> is fully managed, consistently the fastest in independent benchmarks, and used by teams at Notion, Shopify, and Slack.</>,
+                    ],
+                  },
+                  {
+                    name: "OpenAI",
+                    role: "Embeddings & LLM",
+                    accent: "#3ED8C0",
+                    dot: "#10a37f",
+                    detail: [
+                      <>We call two separate <strong>OpenAI</strong> APIs. The <strong>embeddings API</strong> (<strong>text-embedding-3-small</strong>) runs at setup time to convert every knowledge base section into a searchable number representation, and again at query time to convert each question.</>,
+                      <>The <strong>chat completions API</strong> (<strong>GPT-5-mini</strong>) runs once per query to read the retrieved context and produce the structured response. We chose <strong>GPT-5-mini</strong> over older models because it handles multi-step decisions and structured JSON output more reliably, and because it supports <strong>native function calling</strong>, which is what makes the Linear ticket creation work without a separate service.</>,
+                      <>Using one provider for both APIs keeps the integration simple and reduces the number of things that can fail.</>,
+                    ],
+                  },
+                  {
+                    name: "LangSmith",
+                    role: "Observability",
+                    accent: "#F5A154",
+                    dot: "#F5A154",
+                    detail: [
+                      <><strong>LangSmith</strong> wraps the OpenAI client and records every call automatically. Each session captures the full chain: input, retrieval results, model reasoning, tool calls, output, and eval score.</>,
+                      <>For a team evaluating whether to expand this kind of agent, that trace is the difference between a gut feeling about quality and an actual dataset. You can filter sessions by eval score, find the questions the agent struggled with, and make a case for what to improve with real evidence rather than anecdote.</>,
+                      <>The alternatives for tracing: <strong>Weights and Biases</strong> is excellent for model training but is not designed for production LLM chains. <strong>Helicone</strong> covers cost and latency but lacks full trace inspection. <strong>LangSmith</strong> is purpose-built for LLM applications and integrates in two lines of code. For continuous evaluation in production, <strong>Arize</strong> is the natural complement. LangSmith captures the traces, Arize scores them independently.</>,
+                    ],
+                  },
+                  {
+                    name: "Arize",
+                    role: "Online evaluation",
+                    accent: "#7B5CF3",
+                    dot: "#7B5CF3",
+                    detail: [
+                      <>This demo uses <strong>Arize</strong> to score every response with an independent judge model. The judge receives the original question, the retrieved context, and the generated answer as inputs. It never generated the answer itself, so it has no incentive to call a bad answer good.</>,
+                      <><strong>Arize</strong> runs four evaluators on every response: hallucination detection, answer relevance, retrieval quality, and citation accuracy. The scores attach to each LangSmith trace so you can filter sessions by quality and see exactly where the agent is underperforming.</>,
+                      <>We chose <strong>Arize</strong> over alternatives like <strong>Weights and Biases</strong> (built for model training, not production LLM chains) and <strong>Helicone</strong> (good for cost tracking, limited on eval depth). Arize is purpose-built for this use case and ships with out-of-the-box evaluators that work without custom configuration.</>,
+                    ],
+                  },
+                ] as { name: string; role: string; accent: string; dot: string; detail: React.ReactNode[] }[]
+              ).map(({ name, role, detail, accent, dot }) => (
+                <div
+                  key={name}
+                  className="card-sm p-5 space-y-3"
+                  style={{ background: "var(--surface)" }}
+                >
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ background: dot }} />
+                    <p className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>{name}</p>
+                    <span
+                      className="text-[10px] font-medium px-1.5 py-0.5 rounded"
+                      style={{ background: `${accent}14`, color: accent }}
+                    >
+                      {role}
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {detail.map((para, j) => (
+                      <p key={j} className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{para}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Footer ── */}
+        <footer
+          className="w-full border-t py-8 text-center text-xs"
+          style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+        >
+          Internal Helpdesk Agent · Built with Next.js, Pinecone, GPT-5-mini, LangSmith, and Arize
+        </footer>
       </main>
     </div>
+  );
+}
+
+/* ── Small tech badge in nav ── */
+function TechBadge({ label, color }: { label: string; color: string }) {
+  return (
+    <span
+      className="hidden sm:inline-flex items-center gap-1 text-[10px] font-medium px-2 py-1 rounded-md"
+      style={{ background: `${color}14`, color }}
+    >
+      <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
+      {label}
+    </span>
   );
 }
