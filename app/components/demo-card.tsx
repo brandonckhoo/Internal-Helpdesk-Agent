@@ -156,7 +156,7 @@ export default function HelpdeskChat() {
             How can I help you today?
           </h1>
           <p className="text-base" style={{ color: "var(--muted)" }}>
-            Ask about company policies, tools, or submit an engineering ticket.
+            Ask about company policies, report a bug, or get routed to the right team.
           </p>
         </div>
       )}
@@ -520,7 +520,7 @@ export default function HelpdeskChat() {
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder={isFocused || query ? "Ask about policies, tools, or report an issue…" : placeholder}
+          placeholder={isFocused || query ? "Ask about policies, report a bug, or get routed to the right team…" : placeholder}
           rows={1}
           className="w-full resize-none bg-transparent text-sm outline-none"
           style={{
