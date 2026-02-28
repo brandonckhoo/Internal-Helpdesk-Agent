@@ -177,7 +177,13 @@ async function runJudge(
     ],
   });
 
-  return JSON.parse(judgeResponse.choices[0].message.content ?? "{}");
+  const result = JSON.parse(judgeResponse.choices[0].message.content ?? "{}");
+  // Attach token usage so the caller can aggregate it
+  result._usage = {
+    prompt: judgeResponse.usage?.prompt_tokens ?? 0,
+    completion: judgeResponse.usage?.completion_tokens ?? 0,
+  };
+  return result;
 }
 
 type AgentResult = {
@@ -186,6 +192,7 @@ type AgentResult = {
   routing: unknown;
   tool_results: unknown[];
   judge: unknown;
+  _usage: { prompt: number; completion: number; total: number };
 };
 
 const runAgent = traceable(
@@ -211,6 +218,9 @@ const runAgent = traceable(
       })),
     };
 
+    let promptTokens = 0;
+    let completionTokens = 0;
+
     // First call — agent decides whether to call a tool
     const first = await client.chat.completions.create({
       model: "gpt-5-mini",
@@ -218,6 +228,8 @@ const runAgent = traceable(
       tool_choice: "auto",
       messages,
     });
+    promptTokens += first.usage?.prompt_tokens ?? 0;
+    completionTokens += first.usage?.completion_tokens ?? 0;
 
     const firstMessage = first.choices[0].message;
     messages.push(firstMessage);
@@ -246,6 +258,8 @@ const runAgent = traceable(
         response_format: { type: "json_object" },
         messages,
       });
+      promptTokens += second.usage?.prompt_tokens ?? 0;
+      completionTokens += second.usage?.completion_tokens ?? 0;
 
       const parsed: Record<string, unknown> = JSON.parse(
         second.choices[0].message.content ?? "{}"
@@ -253,6 +267,9 @@ const runAgent = traceable(
 
       const answerText = (parsed.answer as { text?: string } | null)?.text ?? null;
       const judge = await runJudge(query, retrieved, answerText);
+      const judgeUsage = (judge as { _usage?: { prompt: number; completion: number } })?._usage;
+      promptTokens += judgeUsage?.prompt ?? 0;
+      completionTokens += judgeUsage?.completion ?? 0;
 
       return {
         decision: parsed.decision,
@@ -263,6 +280,7 @@ const runAgent = traceable(
           ...(linearTicket ? [{ tool: "create_linear_ticket", ticket: linearTicket }] : []),
         ],
         judge,
+        _usage: { prompt: promptTokens, completion: completionTokens, total: promptTokens + completionTokens },
       };
     }
 
@@ -273,6 +291,9 @@ const runAgent = traceable(
 
     const answerText = (parsed.answer as { text?: string } | null)?.text ?? null;
     const judge = await runJudge(query, retrieved, answerText);
+    const judgeUsage = (judge as { _usage?: { prompt: number; completion: number } })?._usage;
+    promptTokens += judgeUsage?.prompt ?? 0;
+    completionTokens += judgeUsage?.completion ?? 0;
 
     return {
       decision: parsed.decision,
@@ -280,6 +301,7 @@ const runAgent = traceable(
       routing: parsed.routing ?? undefined,
       tool_results: [ragResult],
       judge,
+      _usage: { prompt: promptTokens, completion: completionTokens, total: promptTokens + completionTokens },
     };
   },
   { name: "helpdesk-agent", run_type: "chain" }
@@ -295,14 +317,21 @@ export async function POST(req: NextRequest) {
 
   try {
     const span = trace.getActiveSpan();
+    span?.setAttribute("openinference.span.kind", "chain");
+    span?.updateName("helpdesk-agent");
     span?.setAttribute("input.value", query);
 
     const result = await runAgent(query);
 
     const answerText = (result.answer as { text?: string } | null)?.text ?? null;
     span?.setAttribute("output.value", answerText ?? (result.routing ? `Routed to: ${(result.routing as { team: string }).team}` : "Out of scope"));
+    span?.setAttribute("llm.token_count.prompt", result._usage.prompt);
+    span?.setAttribute("llm.token_count.completion", result._usage.completion);
+    span?.setAttribute("llm.token_count.total", result._usage.total);
 
-    return NextResponse.json(result);
+    // Strip internal _usage field before sending to client
+    const { _usage: _, ...clientResult } = result;
+    return NextResponse.json(clientResult);
   } catch (err) {
     console.error("Helpdesk API error:", err);
     return NextResponse.json(
