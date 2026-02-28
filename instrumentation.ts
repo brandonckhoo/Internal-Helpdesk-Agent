@@ -11,6 +11,8 @@ export function register() {
       headers: {
         space_id: process.env.ARIZE_SPACE_ID!,
         api_key: process.env.ARIZE_API_KEY!,
+        model_id: "internal-helpdesk-agent",
+        model_version: "1.0",
       },
     });
 
