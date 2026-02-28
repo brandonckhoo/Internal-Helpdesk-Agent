@@ -113,7 +113,7 @@ export default function FaqSection() {
 
             {open === i && (
               <div
-                className="px-6 pb-5 space-y-2.5 pl-9"
+                className="px-6 pt-4 pb-5 space-y-2.5 pl-9"
                 style={{ borderTop: `1px solid ${accent}18` }}
               >
                 {a.map((para, j) => (
