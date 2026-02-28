@@ -148,7 +148,8 @@ export default function HelpdeskChat() {
 
       {/* ── Heading (hidden once result is shown) ── */}
       {!hasResult && (
-        <div className="text-center space-y-2 mb-2">
+        <div className="text-center space-y-3 mb-2">
+          <img src="/owl.svg" alt="Owl" className="mx-auto h-14 w-14" />
           <h1
             className="text-3xl font-semibold tracking-tight"
             style={{ color: "var(--foreground)" }}
