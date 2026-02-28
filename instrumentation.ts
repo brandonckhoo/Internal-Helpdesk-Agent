@@ -1,4 +1,4 @@
-import { NodeTracerProvider, BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
+import { NodeTracerProvider, SimpleSpanProcessor } from "@opentelemetry/sdk-trace-node";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
@@ -18,7 +18,7 @@ export function register() {
       resource: resourceFromAttributes({
         "openinference.project.name": "internal-helpdesk-agent",
       }),
-      spanProcessors: [new BatchSpanProcessor(exporter)],
+      spanProcessors: [new SimpleSpanProcessor(exporter)],
     });
     provider.register();
 
