@@ -150,7 +150,7 @@ export default function HelpdeskChat() {
       {!hasResult && (
         <div className="text-center space-y-2 mb-2">
           <h1
-            className="text-5xl font-semibold tracking-tight"
+            className="text-3xl font-semibold tracking-tight"
             style={{ color: "var(--foreground)" }}
           >
             How can I help you today?
