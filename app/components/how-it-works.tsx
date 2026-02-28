@@ -146,7 +146,7 @@ export default function HowItWorks() {
               {/* Body */}
               {open === i && (
                 <div
-                  className="px-5 pb-5 space-y-2"
+                  className="px-5 pt-4 pb-5 space-y-2"
                   style={{ borderTop: `1px solid ${accent}18` }}
                 >
                   {body.map((para, j) => (
