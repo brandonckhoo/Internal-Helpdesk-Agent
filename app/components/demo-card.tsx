@@ -218,13 +218,19 @@ export default function HelpdeskChat() {
 
             {/* Score pill */}
             <div className="ml-auto flex items-center gap-1.5 pb-1">
-              <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ background: result.judge.passed ? "#4ade80" : "#f87171" }}
-              />
-              <span className="text-xs" style={{ color: "var(--muted)" }}>
-                {(result.judge.score * 100).toFixed(0)}%
-              </span>
+              {result.judge.score != null ? (
+                <>
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ background: result.judge.passed ? "#4ade80" : "#f87171" }}
+                  />
+                  <span className="text-xs" style={{ color: "var(--muted)" }}>
+                    {(result.judge.score * 100).toFixed(0)}%
+                  </span>
+                </>
+              ) : (
+                <span className="text-xs" style={{ color: "var(--muted)" }}>N/A</span>
+              )}
             </div>
           </div>
 
@@ -469,39 +475,50 @@ export default function HelpdeskChat() {
             {/* ── Eval tab ── */}
             {activeTab === "eval" && (
               <div className="space-y-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-3xl font-semibold" style={{ color: "var(--foreground)" }}>
-                      {(result.judge.score * 100).toFixed(0)}
-                      <span className="text-sm font-normal ml-0.5" style={{ color: "var(--muted)" }}>/100</span>
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>Overall eval score</p>
-                  </div>
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-medium"
-                    style={result.judge.passed
-                      ? { background: "rgba(52,211,153,0.12)", color: "#059669" }
-                      : { background: "rgba(248,113,113,0.12)", color: "#dc2626" }}
-                  >
-                    {result.judge.passed ? "✓ Passed" : "✗ Failed"}
-                  </span>
-                </div>
-                <div className="space-y-2.5">
-                  {Object.entries(result.judge.criteria).map(([key, val]) => (
-                    <div key={key} className="flex items-center gap-3">
-                      <span className="w-28 text-xs capitalize" style={{ color: "var(--muted)" }}>
-                        {key.replace("_", " ")}
-                      </span>
-                      <div className="flex-1 h-1.5 rounded-full overflow-hidden"
-                        style={{ background: "var(--surface-raised)", border: "1px solid var(--border)" }}>
-                        <div className="progress-fill gradient-primary" style={{ width: `${val * 100}%` }} />
+                {result.judge.score != null && result.judge.criteria != null ? (
+                  <>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-3xl font-semibold" style={{ color: "var(--foreground)" }}>
+                          {(result.judge.score * 100).toFixed(0)}
+                          <span className="text-sm font-normal ml-0.5" style={{ color: "var(--muted)" }}>/100</span>
+                        </p>
+                        <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>Overall eval score</p>
                       </div>
-                      <span className="text-xs w-8 text-right" style={{ color: "var(--foreground)" }}>
-                        {(val * 100).toFixed(0)}%
+                      <span
+                        className="rounded-full px-3 py-1 text-xs font-medium"
+                        style={result.judge.passed
+                          ? { background: "rgba(52,211,153,0.12)", color: "#059669" }
+                          : { background: "rgba(248,113,113,0.12)", color: "#dc2626" }}
+                      >
+                        {result.judge.passed ? "✓ Passed" : "✗ Failed"}
                       </span>
                     </div>
-                  ))}
-                </div>
+                    <div className="space-y-2.5">
+                      {Object.entries(result.judge.criteria).map(([key, val]) => (
+                        <div key={key} className="flex items-center gap-3">
+                          <span className="w-28 text-xs capitalize" style={{ color: "var(--muted)" }}>
+                            {key.replace("_", " ")}
+                          </span>
+                          <div className="flex-1 h-1.5 rounded-full overflow-hidden"
+                            style={{ background: "var(--surface-raised)", border: "1px solid var(--border)" }}>
+                            <div className="progress-fill gradient-primary" style={{ width: `${(val as number) * 100}%` }} />
+                          </div>
+                          <span className="text-xs w-8 text-right" style={{ color: "var(--foreground)" }}>
+                            {((val as number) * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="rounded-xl border p-4"
+                    style={{ borderColor: "var(--border)", background: "var(--surface-raised)" }}>
+                    <p className="text-sm font-medium" style={{ color: "var(--muted)" }}>
+                      No eval score — query was routed or out of scope.
+                    </p>
+                  </div>
+                )}
                 <p className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
                   {result.judge.feedback}
                 </p>
